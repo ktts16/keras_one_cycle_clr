@@ -123,14 +123,17 @@ class CLR(keras.callbacks.Callback):
     def on_train_begin(self, logs={}):
         self.n_epoch = self.params['epochs']
 
-        # find number of batches per epoch
-        if self.params['batch_size'] is not None:  # model.fit
-            self.n_bpe = int(np.ceil(self.params['samples'] / self.params['batch_size']))
-        if self.params['batch_size'] is None:  # model.fit_generator
-            self.n_bpe = self.params['samples']
+        if 'batch_size' in self.params.keys():
+            # find number of batches per epoch
+            if self.params['batch_size'] is not None:  # model.fit
+                self.n_bpe = int(np.ceil(self.params['samples'] / self.params['batch_size']))
+            if self.params['batch_size'] is None:  # model.fit_generator
+                self.n_bpe = self.params['samples']
 
-        self.n_iter = self.n_epoch * self.n_bpe
-        # this is a number of iteration in one cycle
+            self.n_iter = self.n_epoch * self.n_bpe
+            # this is a number of iteration in one cycle
+        else:
+            self.n_iter = self.params['steps']
 
         if self.reset_on_train_begin:
             self.reset
