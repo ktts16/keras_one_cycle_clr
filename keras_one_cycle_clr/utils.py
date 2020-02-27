@@ -2,9 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import tensorflow as tf
+tf_version = int(tf.__version__[0])
+if tf_version == 2:
+    import tensorflow.compat.v1 as tf
+    tf.disable_v2_behavior()
 try:
     import tensorflow.keras as keras
-    import tensorflow.keras.backend as K
+    if tf_version == 2:
+        from tensorflow.compat.v1.keras import backend as K
+    else:
+        import tensorflow.keras.backend as K
 except:
     import keras
     import keras.backend as K
